@@ -10,11 +10,13 @@
 		margin: 16px auto;
 		padding: 20px;
 		background-color: #fff;
-		@apply(--paper-font-display1);
 		text-align: center;
+		@apply(--paper-font-body2);
 	}
+	
 	span {
 		padding: 0 10px;
+		@apply(--paper-font-display1);
 	}
 </style>
 
@@ -22,7 +24,7 @@
 	<paper-material>
 		<paper-ripple></paper-ripple>
 		<span>{{game.player1.name}}</span>
-		:
+		vs.
 		<span>{{game.player2.name}}</span>
 	</paper-material>
 </template>
