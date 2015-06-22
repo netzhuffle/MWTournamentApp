@@ -1,0 +1,57 @@
+<!-- Paper elements -->
+<link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+
+<dom-module id="mwtournament-app">
+
+<style>
+	:host {
+	  display: block;
+	  background-color: #eee;
+	  height: 100%;
+	}
+	
+	paper-material {
+	  height: 100px;
+	  max-width: 640px;
+	  margin: 16px auto;
+	  background-color: #fff;
+	  @apply(--paper-font-display1)
+	}
+</style>
+
+<template>
+
+	<paper-header-panel class="flex">
+		
+		<paper-toolbar>
+			<div class="title">MW Tournaments</div>
+		</paper-toolbar>
+		
+		<div>
+			<paper-material><paper-ripple></paper-ripple></paper-material>
+			<paper-material><paper-ripple></paper-ripple></paper-material>
+			<paper-material><paper-ripple></paper-ripple></paper-material>
+			<paper-material><paper-ripple></paper-ripple></paper-material>
+			<paper-material><paper-ripple></paper-ripple></paper-material>
+			<paper-material><paper-ripple></paper-ripple></paper-material>
+			<paper-material><paper-ripple></paper-ripple></paper-material>
+		</div>
+		
+	</paper-header-panel>
+
+</template>
+
+<script>
+Polymer({
+	is: 'mwtournament-app'
+});
+</script>
+
+</dom-module>
