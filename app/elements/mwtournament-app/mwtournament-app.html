@@ -1,12 +1,10 @@
 <!-- Paper elements -->
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
-<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 
 <dom-module id="mwtournament-app">
 
@@ -24,6 +22,23 @@
 	  background-color: #fff;
 	  @apply(--paper-font-display1)
 	}
+	
+	.fabposition {
+	  max-width: 640px;
+	  margin: 0px auto;
+	  position: relative;
+	}
+	
+	paper-fab {
+		@apply(--shadow-elevation-3dp);
+		position: absolute;
+		right: 25px;
+		margin-top: -45px;
+	}
+	
+	#games {
+		padding-bottom: 35px;
+	}
 </style>
 
 <template>
@@ -34,7 +49,7 @@
 			<div class="title">MW Tournaments</div>
 		</paper-toolbar>
 		
-		<div>
+		<div id="games">
 			<paper-material><paper-ripple></paper-ripple></paper-material>
 			<paper-material><paper-ripple></paper-ripple></paper-material>
 			<paper-material><paper-ripple></paper-ripple></paper-material>
@@ -42,6 +57,9 @@
 			<paper-material><paper-ripple></paper-ripple></paper-material>
 			<paper-material><paper-ripple></paper-ripple></paper-material>
 			<paper-material><paper-ripple></paper-ripple></paper-material>
+			<div class="fabposition">
+				<paper-fab icon="add"></paper-fab>
+			</div>
 		</div>
 		
 	</paper-header-panel>
