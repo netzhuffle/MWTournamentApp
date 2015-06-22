@@ -1,0 +1,43 @@
+<link rel="import" href="../mwtournament-gamecard/mwtournament-gamecard.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
+<dom-module id="mwtournament-gamepage">
+
+<style>
+	:host {
+		padding-bottom: 35px;
+	}
+	
+	.fabposition {
+	  max-width: 640px;
+	  margin: 0px auto;
+	  position: relative;
+	}
+	
+	paper-fab {
+		@apply(--shadow-elevation-3dp);
+		position: absolute;
+		right: 25px;
+		margin-top: -45px;
+	}
+</style>
+
+<template>
+	<template is="dom-repeat" items="{{games}}" as="game">
+		<mwtournament-gamecard game="{{game}}"></mwtournament-gamecard>
+	</template>
+	<div class="fabposition">
+		<paper-fab icon="add" hidden></paper-fab>
+	</div>
+</template>
+
+<script>
+Polymer({
+	is: 'mwtournament-gamepage',
+	properties: {
+		games: Array
+	}
+});
+</script>
+
+</dom-module>

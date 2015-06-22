@@ -5,23 +5,34 @@
 
 <style>
 	paper-material {
-	  height: 100px;
-	  max-width: 640px;
-	  margin: 16px auto;
-	  background-color: #fff;
-	  @apply(--paper-font-display1)
+		height: 60px;
+		max-width: 640px;
+		margin: 16px auto;
+		padding: 20px;
+		background-color: #fff;
+		@apply(--paper-font-display1);
+		text-align: center;
+	}
+	span {
+		padding: 0 10px;
 	}
 </style>
 
 <template>
 	<paper-material>
 		<paper-ripple></paper-ripple>
+		<span>{{game.player1.name}}</span>
+		:
+		<span>{{game.player2.name}}</span>
 	</paper-material>
 </template>
 
 <script>
 Polymer({
-	is: 'mwtournament-gamecard'
+	is: 'mwtournament-gamecard',
+	properties: {
+		game: Object
+	}
 });
 </script>
 

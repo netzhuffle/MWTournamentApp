@@ -1,0 +1,81 @@
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="mwtournament-playercard">
+
+<style>
+	paper-material {
+		max-width: 640px;
+		margin: 0 auto 1px auto;
+		padding: 20px 50px;
+		background-color: #fff;
+		@apply(--paper-font-body2);
+	}
+	
+	.category {
+		padding-right: 10px;
+	}
+	
+	#points {
+		font-size: 1.2em;
+		font-weight: bold;
+	}
+	
+	#games {
+		color: #aaa;
+		@apply(--paper-font-body1);
+	}
+</style>
+
+<template>
+	<paper-material>
+		<template is="dom-if" if="{{none}}">
+			No players. Add some!
+		</template>
+		<template is="dom-if" if="{{player}}">
+			<span class="category">{{player.name}}</span>
+			<span class="category" id="points">{{player.points}}</span>
+			<span class="category" id="games">
+				(<span>{{player.games}}</span> Games)
+			</span>
+		</template>
+		<template is="dom-if" if="{{edit}}">
+			<paper-input label="Name" value="{{name}}"></paper-input>
+			<paper-button on-tap="addPlayer" raised>Add</paper-button>
+		</template>
+	</paper-material>
+</template>
+
+<script>
+Polymer({
+	is: 'mwtournament-playercard',
+	properties: {
+		none: {
+			type: Boolean,
+			value: false
+		},
+		player: Object,
+		edit: {
+			type: Boolean,
+			value: false
+		},
+		name: String,
+		invalid: {
+			type: Boolean,
+			value: true
+		}
+	},
+	addPlayer: function(e) {
+		this.fire("add", {
+			name: this.name,
+			points: 0,
+			games: 0,
+			joined: Date.now()
+		});
+		this.name = "";
+	}
+});
+</script>
+
+</dom-module>

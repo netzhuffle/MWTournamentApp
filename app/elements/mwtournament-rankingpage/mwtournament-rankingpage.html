@@ -1,0 +1,69 @@
+<link rel="import" href="../mwtournament-playercard/mwtournament-playercard.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
+<dom-module id="mwtournament-rankingpage">
+
+<style>
+	.fabposition {
+	  max-width: 640px;
+	  margin: 0px auto;
+	  position: relative;
+	}
+	
+	paper-fab {
+		@apply(--shadow-elevation-3dp);
+		position: absolute;
+		right: 25px;
+		margin-top: -30px;
+	}
+</style>
+
+<template>
+	<template is="dom-if" if="{{!players.length}}">
+		<mwtournament-playercard none></mwtournament-playercard>
+	</template>
+	<template is="dom-repeat" items="{{players}}" as="player" sort="comparePlayers">
+		<mwtournament-playercard player="{{player}}"></mwtournament-playercard>
+	</template>
+	<mwtournament-playercard on-add="addPlayer" edit hidden$="{{!showAddForm}}"></mwtournament-playercard>
+	<div class="fabposition">
+		<paper-fab icon="add" on-tap="addTap" hidden$="{{showAddForm}}"></paper-fab>
+	</div>
+</template>
+
+<script>
+Polymer({
+	is: 'mwtournament-rankingpage',
+	properties: {
+		players: Array,
+		showAddForm: {
+			type: Boolean,
+			value: false
+		},
+		newName: String
+	},
+	comparePlayers(player1, player2) {
+		var player1first = -1;
+		var player2first = 1;
+		if (player1.games > 0 && player2.games === 0) {
+			return player1first; // ensure new players are at the bottom
+		}
+		if (player1.games === 0 && player2.games > 0) {
+			return player2first; // ensure new players are at the bottom
+		}
+		if (player1.games === 0 && player2.games === 0) {
+			return player1.joined - player2.joined; // older player first
+		}
+		return player2.points - player1.points; // most points first
+	},
+	addTap: function(e) {
+		this.showAddForm = true;
+	},
+	addPlayer: function(e) {
+		this.push("players", e.detail);
+		this.showAddForm = false;
+	}
+});
+</script>
+
+</dom-module>
