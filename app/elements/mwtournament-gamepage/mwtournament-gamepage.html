@@ -71,8 +71,8 @@ Polymer({
 		this.players.sort(this.players.comparePlayers);
 		this.resetAllPlayers();
 		if (playerLength % 2 === 1) {
-			var player = this.getByePlayer();
-			this.giveBye(player);
+			var playerIndex = this.getByePlayerIndex();
+			this.giveBye(playerIndex);
 		}
 		for (var i = 0; i < playerLength; i++) {
 			if (!this.players[i].hasOpponent) {
@@ -95,21 +95,22 @@ Polymer({
 			this.players[i].hasOpponent = false;
 		}
 	},
-	getByePlayer: function() {
+	getByePlayerIndex: function() {
 		var playerLength = this.players.length;
 		for (var i = playerLength - 1; i >= 0; i--) {
 			if (!this.players[i].hadBye) {
-				return this.players[i];
+				return i;
 			}
 		}
 		// everybody had a bye, take last player
-		return this.players[playerLength - 1];
+		return playerLength - 1;
 	},
-	giveBye: function(player) {
+	giveBye: function(i) {
+		var player = this.players[i];
 		player.hadBye = true;
 		player.hasOpponent = true;
-		player.points += this.winpoints;
-		player.games++;
+		this.set("players." + i + ".points", player.points + this.winpoints);
+		this.set("players." + i + ".games", player.games + 1);
 		this.push("games", {
 			bye: player
 		});
