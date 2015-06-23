@@ -22,10 +22,23 @@
 
 <template>
 	<paper-material>
-		<paper-ripple></paper-ripple>
-		<span>{{game.player1.name}}</span>
-		vs.
-		<span>{{game.player2.name}}</span>
+		<template is="dom-if" if="{{noPlayers}}">
+			Once you have added a few players you can start the first tournament round here!
+		</template>
+		<template is="dom-if" if="{{none}}">
+			Click on the arrow to start the first turnament round!
+		</template>
+		<template is="dom-if" if="{{game}}">
+			<template is="dom-if" if="{{!game.bye}}">
+				<paper-ripple></paper-ripple>
+				<span>{{game.player1.name}}</span>
+				vs.
+				<span>{{game.player2.name}}</span>
+			</template>
+			<template is="dom-if" if="{{!game.player1}}">
+				Bye, <span>{{game.bye.name}}</span> :)
+			</template>
+		</template>
 	</paper-material>
 </template>
 
@@ -33,6 +46,14 @@
 Polymer({
 	is: 'mwtournament-gamecard',
 	properties: {
+		noPlayers: {
+			type: Boolean,
+			value: false
+		},
+		none: {
+			type: Boolean,
+			value: false
+		},
 		game: Object
 	}
 });

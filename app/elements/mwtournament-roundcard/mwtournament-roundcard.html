@@ -1,0 +1,34 @@
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+
+<dom-module id="mwtournament-roundcard">
+
+<style>
+	paper-material {
+		max-width: 640px;
+		margin: 0 auto 1px auto;
+		padding: 20px 50px;
+		background-color: #fff;
+		@apply(--paper-font-body2);
+	}
+</style>
+
+<template>
+	<paper-material>
+		Round <span>{{round}}</span>
+		<span hidden$="{{!swissstyle}}">Swiss style</span>
+		<span hidden$="{{swissstyle}}">Danish system</span>
+		tournament
+	</paper-material>
+</template>
+
+<script>
+Polymer({
+	is: 'mwtournament-roundcard',
+	properties: {
+		round: Number,
+		swissstyle: Boolean
+	}
+});
+</script>
+
+</dom-module>

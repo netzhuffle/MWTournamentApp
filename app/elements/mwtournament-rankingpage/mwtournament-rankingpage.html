@@ -22,7 +22,7 @@
 	<template is="dom-if" if="{{!players.length}}">
 		<mwtournament-playercard none></mwtournament-playercard>
 	</template>
-	<template is="dom-repeat" items="{{players}}" as="player" sort="comparePlayers">
+	<template is="dom-repeat" items="{{players}}" as="player" sort="comparePlayers" observe="games points">
 		<mwtournament-playercard player="{{player}}"></mwtournament-playercard>
 	</template>
 	<mwtournament-playercard on-add="addPlayer" edit hidden$="{{!showAddForm}}"></mwtournament-playercard>
@@ -42,26 +42,15 @@ Polymer({
 		},
 		newName: String
 	},
-	comparePlayers(player1, player2) {
-		var player1first = -1;
-		var player2first = 1;
-		if (player1.games > 0 && player2.games === 0) {
-			return player1first; // ensure new players are at the bottom
-		}
-		if (player1.games === 0 && player2.games > 0) {
-			return player2first; // ensure new players are at the bottom
-		}
-		if (player1.games === 0 && player2.games === 0) {
-			return player1.joined - player2.joined; // older player first
-		}
-		return player2.points - player1.points; // most points first
-	},
 	addTap: function(e) {
 		this.showAddForm = true;
 	},
 	addPlayer: function(e) {
-		this.push("players", e.detail);
 		this.showAddForm = false;
+		this.push("players", e.detail);
+	},
+	comparePlayers: function(player1, player2) {
+		return this.players.comparePlayers.call(this.players, player1, player2);
 	}
 });
 </script>

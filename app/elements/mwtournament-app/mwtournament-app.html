@@ -34,7 +34,7 @@
 		
 		<neon-animated-pages selected="{{selected}}" entry-animation="{{getEntryAnimation(selected)}}" exit-animation="{{getExitAnimation(selected)}}">
 			<mwtournament-rankingpage players="{{players}}"></mwtournament-rankingpage>
-			<mwtournament-gamepage games="{{games}}"></mwtournament-gamepage>
+			<mwtournament-gamepage games="{{games}}" players="{{players}}" winpoints="4"></mwtournament-gamepage>
 		</neon-animated-pages>
 		
 	</paper-header-panel>
@@ -52,54 +52,28 @@ Polymer({
 		players: {
 			type: Array,
 			value: function() {
-				return [];
+				var players = [];
+				players.comparePlayers = function(player1, player2) {
+					var player1first = -1;
+					var player2first = 1;
+					if (player1.games > 0 && player2.games === 0) {
+						return player1first; // ensure new players are at the bottom
+					}
+					if (player1.games === 0 && player2.games > 0) {
+						return player2first; // ensure new players are at the bottom
+					}
+					if (player1.games === 0 && player2.games === 0) {
+						return player1.joined - player2.joined; // older player first
+					}
+					return player2.points - player1.points; // most points first
+				};
+				return players;
 			}
 		},
 		games: {
 			type: Array,
 			value: function() {
-				return [
-					{
-						player1: {
-							name: "Jakob",
-							points: 9
-						},
-						player2: {
-							name: "Jannis",
-							points: 12
-						}
-					},
-					{
-						player1: {
-							name: "Jakob",
-							points: 9
-						},
-						player2: {
-							name: "Jannis",
-							points: 12
-						}
-					},
-					{
-						player1: {
-							name: "Jakob",
-							points: 9
-						},
-						player2: {
-							name: "Jannis",
-							points: 12
-						}
-					},
-					{
-						player1: {
-							name: "Jakob",
-							points: 9
-						},
-						player2: {
-							name: "Jannis",
-							points: 12
-						}
-					}
-				];
+				return [];
 			}
 		}
 	},

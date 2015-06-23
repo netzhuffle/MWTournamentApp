@@ -1,4 +1,5 @@
 <link rel="import" href="../mwtournament-gamecard/mwtournament-gamecard.html">
+<link rel="import" href="../mwtournament-roundcard/mwtournament-roundcard.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 
 <dom-module id="mwtournament-gamepage">
@@ -23,11 +24,20 @@
 </style>
 
 <template>
+	<template is="dom-if" if="{{!players.length}}">
+		<mwtournament-gamecard no-players></mwtournament-gamecard>
+	</template>
+	<template is="dom-if" if="{{!games.length}}">
+		<mwtournament-gamecard none hidden$="{{!players.length}}"></mwtournament-gamecard>
+	</template>
+	<template is="dom-if" if="{{isRunning(games.length)}}">
+		<mwtournament-roundcard round="{{round}}" swissstyle$="{{swissstyle}}"></mwtournament-roundcard>
+	</template>
 	<template is="dom-repeat" items="{{games}}" as="game">
 		<mwtournament-gamecard game="{{game}}"></mwtournament-gamecard>
 	</template>
 	<div class="fabposition">
-		<paper-fab icon="add" hidden></paper-fab>
+		<paper-fab icon="arrow-forward" on-tap="startNextRound" hidden$="{{!mayStartNextRound(games, players.length)}}"></paper-fab>
 	</div>
 </template>
 
@@ -35,7 +45,88 @@
 Polymer({
 	is: 'mwtournament-gamepage',
 	properties: {
-		games: Array
+		games: Array,
+		players: Array,
+		winpoints: Number,
+		round: {
+			type: Number,
+			value: 0
+		},
+		swissstyle: {
+			type: Boolean,
+			value: true // have to switch to Danish System if to many rounds for player number
+		}
+	},
+	isRunning: function(gamesLength) {
+		return !!gamesLength;
+	},
+	mayStartNextRound: function(games, playersLength) {
+		return !!playersLength;
+	},
+	startNextRound: function(e) {
+		this.games = [];
+		this.round++;
+		var playerLength = this.players.length;
+		this.swissstyle = this.swissstyle && this.round <= Math.ceil(Math.log(playerLength) / Math.log(2));
+		this.players.sort(this.players.comparePlayers);
+		this.resetAllPlayers();
+		if (playerLength % 2 === 1) {
+			var player = this.getByePlayer();
+			this.giveBye(player);
+		}
+		for (var i = 0; i < playerLength; i++) {
+			if (!this.players[i].hasOpponent) {
+				var player = this.players[i];
+				var opponent = this.getOpponentForPlayer(player, i);
+				player.hasOpponent = true;
+				opponent.hasOpponent = true;
+				this.push("games", {
+					player1: player,
+					player2: opponent
+				});
+				player.facedOpponents.push(opponent);
+				opponent.facedOpponents.push(player);
+			}
+		}
+	},
+	resetAllPlayers: function() {
+		var playerLength = this.players.length;
+		for (var i = 0; i < playerLength; i++) {
+			this.players[i].hasOpponent = false;
+		}
+	},
+	getByePlayer: function() {
+		var playerLength = this.players.length;
+		for (var i = playerLength - 1; i >= 0; i--) {
+			if (!this.players[i].hadBye) {
+				return this.players[i];
+			}
+		}
+		// everybody had a bye, take last player
+		return this.players[playerLength - 1];
+	},
+	giveBye: function(player) {
+		player.hadBye = true;
+		player.hasOpponent = true;
+		player.points += this.winpoints;
+		player.games++;
+		this.push("games", {
+			bye: player
+		});
+	},
+	getOpponentForPlayer: function(player, playerIndex) {
+		var playerLength = this.players.length;
+		for (var o = playerIndex + 1; o < playerLength; o++) {
+			var opponent = this.players[o];
+			if (!opponent.hasOpponent && (!this.swissStyle || !this.didPlayerFaceOpponent(player, opponent))) {
+				return this.players[o];
+			}
+		}
+	},
+	didPlayerFaceOpponent: function(player, opponent) {
+		return player.facedOpponents.some(function(pastOpponent) {
+			return opponent === pastOpponent;
+		});
 	}
 });
 </script>
