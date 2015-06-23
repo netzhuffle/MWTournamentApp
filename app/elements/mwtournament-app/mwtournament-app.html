@@ -77,14 +77,14 @@ Polymer({
 			}
 		}
 	},
-	getEntryAnimation(selected) {
+	getEntryAnimation: function(selected) {
 		if (selected === 0) {
 			return "slide-from-left-animation";
 		} else if (selected === 1) {
 			return "slide-from-right-animation";
 		}
 	},
-	getExitAnimation(selected) {
+	getExitAnimation: function(selected) {
 		if (selected === 0) {
 			return "slide-right-animation";
 		} else if (selected === 1) {
