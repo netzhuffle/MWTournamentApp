@@ -45,8 +45,14 @@
 Polymer({
 	is: 'mwtournament-gamepage',
 	properties: {
-		games: Array,
-		players: Array,
+		games: {
+			type: Array,
+			notify: true
+		},
+		players: {
+			type: Array,
+			notify: true
+		},
 		winpoints: Number,
 		round: {
 			type: Number,
@@ -86,7 +92,8 @@ Polymer({
 					player1points: 0,
 					player2points: 0,
 					player1life: 0,
-					player2life: 0
+					player2life: 0,
+					ranked: false
 				});
 				player.facedOpponents.push(opponent);
 				opponent.facedOpponents.push(player);

@@ -22,7 +22,7 @@
 	<template is="dom-if" if="{{!players.length}}">
 		<mwtournament-playercard none></mwtournament-playercard>
 	</template>
-	<template is="dom-repeat" items="{{players}}" as="player" sort="comparePlayers" observe="games points">
+	<template is="dom-repeat" items="{{players}}" as="player" sort="comparePlayers" observe="games points lastLife">
 		<mwtournament-playercard player="{{player}}"></mwtournament-playercard>
 	</template>
 	<mwtournament-playercard on-add="addPlayer" edit hidden$="{{!showAddForm}}"></mwtournament-playercard>
@@ -35,7 +35,10 @@
 Polymer({
 	is: 'mwtournament-rankingpage',
 	properties: {
-		players: Array,
+		players: {
+			type: Array,
+			notify: true
+		},
 		showAddForm: {
 			type: Boolean,
 			value: false
