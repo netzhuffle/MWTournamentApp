@@ -1,3 +1,3 @@
 ## MWTournamentApp
 
-Tournament Web App for Mage Wars. Currently in development and has 0 features.
+Tournament Web App for Mage Wars. Prerelease version – may contain many bugs.
