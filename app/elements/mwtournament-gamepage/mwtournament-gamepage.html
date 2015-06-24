@@ -82,7 +82,7 @@ Polymer({
 		}
 		for (var i = 0; i < playerLength; i++) {
 			if (!sortedPlayers[i].hasOpponent) {
-				var player = this.players[i];
+				var player = sortedPlayers[i];
 				var opponent = this.getOpponentForPlayer(sortedPlayers, player, i);
 				var o = opponent.index;
 				this.set("players." + i + ".hasOpponent", true);
@@ -107,7 +107,7 @@ Polymer({
 	resetAllPlayers: function() {
 		var playerLength = this.players.length;
 		for (var i = 0; i < playerLength; i++) {
-			this.players[i].hasOpponent = false;
+			this.set("players." + i + ".hasOpponent", false);
 		}
 	},
 	getByePlayer: function(sortedPlayers) {
