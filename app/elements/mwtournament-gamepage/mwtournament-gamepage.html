@@ -82,7 +82,11 @@ Polymer({
 				opponent.hasOpponent = true;
 				this.push("games", {
 					player1: player,
-					player2: opponent
+					player2: opponent,
+					player1points: 0,
+					player2points: 0,
+					player1life: 0,
+					player2life: 0
 				});
 				player.facedOpponents.push(opponent);
 				opponent.facedOpponents.push(player);

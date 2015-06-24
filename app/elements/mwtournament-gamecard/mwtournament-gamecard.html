@@ -1,11 +1,12 @@
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../mwtournament-resultform/mwtournament-resultform.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
 
 <dom-module id="mwtournament-gamecard">
 
 <style>
 	paper-material {
-		height: 60px;
 		max-width: 640px;
 		margin: 16px auto;
 		padding: 20px;
@@ -16,12 +17,27 @@
 	
 	span {
 		padding: 0 10px;
+	}
+	
+	.big {
 		@apply(--paper-font-display1);
+	}
+	
+	div {
+		margin-bottom: 20px;
+	}
+	
+	.grey {
+		color: #ccc;
+	}
+	
+	.invisibleRipple {
+		color: #fff;
 	}
 </style>
 
 <template>
-	<paper-material>
+	<paper-material on-tap="tap" on-close="close">
 		<template is="dom-if" if="{{noPlayers}}">
 			Once you have added a few players you can start the first tournament round here!
 		</template>
@@ -30,10 +46,18 @@
 		</template>
 		<template is="dom-if" if="{{game}}">
 			<template is="dom-if" if="{{!game.bye}}">
-				<paper-ripple></paper-ripple>
-				<span>{{game.player1.name}}</span>
-				vs.
-				<span>{{game.player2.name}}</span>
+				<paper-ripple id="ripple"></paper-ripple>
+				<div>
+					<span class="big">{{game.player1.name}}</span>
+					vs.
+					<span class="big">{{game.player2.name}}</span>
+				</div>
+				<div class="grey">
+					<span>{{game.player1points}}</span>
+					:
+					<span>{{game.player2points}}</span>
+				</div>
+				<mwtournament-resultform game="{{game}}" open$="{{openForm}}" opened="{{formOpened}}"></mwtournament-resultform>
 			</template>
 			<template is="dom-if" if="{{!game.player1}}">
 				Bye, <span>{{game.bye.name}}</span> :)
@@ -54,7 +78,28 @@ Polymer({
 			type: Boolean,
 			value: false
 		},
-		game: Object
+		game: Object,
+		openForm: {
+			type: Boolean,
+			value: false
+		},
+		formOpened: {
+			type: Boolean,
+			observer: "deactivateRipple"
+		}
+	},
+	tap: function(e) {
+		this.openForm = true;
+	},
+	close: function(e) {
+		this.openForm = false;
+	},
+	deactivateRipple: function(deactivate) {
+		if (deactivate) {
+			Polymer.dom(this.$$("#ripple")).classList.add("invisibleRipple");
+		} else {
+			Polymer.dom(this.$$("#ripple")).classList.remove("invisibleRipple");
+		}
 	}
 });
 </script>

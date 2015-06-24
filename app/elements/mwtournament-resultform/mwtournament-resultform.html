@@ -1,0 +1,92 @@
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="mwtournament-resultform">
+
+<style>
+	:host {
+		display: block;
+	}
+	
+	span {
+		padding: 0 10px;
+	}
+</style>
+
+<template>
+	<div id="container" hidden$="{{!opened}}">
+		<div class="layout horizontal center">
+			<paper-input class="flex" value="{{game.player1life}}" label="{{getLabelText(game.player1.name)}}" type="number"></paper-input>
+			<span>:</span>
+			<paper-input class="flex" value="{{game.player2life}}" label="{{getLabelText(game.player1.name)}}" type="number"></paper-input>
+		</div>
+		<paper-button raised on-tap="fireClose">Close</paper-button>
+	</div>
+</template>
+
+<script>
+Polymer({
+	is: 'mwtournament-resultform',
+	behaviors: [
+		Polymer.NeonAnimationRunnerBehavior
+	],
+	properties: {
+		game: Object,
+		opened: {
+			type: Boolean,
+			value: false,
+			notify: true,
+			readOnly: true
+		},
+		open: {
+			type: Boolean,
+			value: false,
+			observer: "openChanged",
+			reflectToAttribute: true
+		},
+		animationConfig: {
+			value: function() {
+				return {
+					"entry": {
+						name: "scale-up-animation",
+						node: this,
+						axis: "y",
+						transformOrigin: "top"
+					},
+					"exit": {
+						name: "scale-down-animation",
+						node: this,
+						axis: "y",
+						transformOrigin: "top"
+					}
+				}
+			}
+		}
+	},
+	listeners: {
+		"neon-animation-finish": "animationFinish"
+	},
+	getLabelText: function(playerName) {
+		return "Remaining Life " + playerName + " (Life - Damage)";
+	},
+	fireClose: function(e) {
+		e.stopPropagation();
+		this.fire("close");
+	},
+	openChanged: function(opens) {
+		if (opens) {
+			this._setOpened(true);
+			this.playAnimation("entry");
+		} else {
+			this.playAnimation("exit");
+		}
+	},
+	animationFinish: function(e) {
+		if (!this.open && this.opened) {
+			this._setOpened(false);
+		}
+	}
+});
+</script>
+
+</dom-module>
