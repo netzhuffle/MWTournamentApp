@@ -93,7 +93,7 @@ Polymer({
 		var sortedPlayers = this.players.slice().sort(this.players.comparePlayers);
 		if (playerLength % 2 === 1) {
 			var byePlayer = this.getByePlayer(sortedPlayers);
-			this.giveBye(player);
+			this.giveBye(byePlayer);
 		}
 		for (var i = 0; i < playerLength; i++) {
 			if (!sortedPlayers[i].hasOpponent) {
