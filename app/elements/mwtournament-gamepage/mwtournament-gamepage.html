@@ -34,7 +34,7 @@
 		<mwtournament-roundcard round="{{round}}" swissstyle$="{{swissstyle}}"></mwtournament-roundcard>
 	</template>
 	<template is="dom-repeat" items="{{games}}" as="game">
-		<mwtournament-gamecard game="{{game}}"></mwtournament-gamecard>
+		<mwtournament-gamecard game="{{game}}" players="{{players}}"></mwtournament-gamecard>
 	</template>
 	<div class="fabposition">
 		<paper-fab icon="arrow-forward" on-tap="startNextRound" hidden$="{{!mayStartNextRound(games, players.length)}}"></paper-fab>
@@ -74,8 +74,8 @@ Polymer({
 		this.round++;
 		var playerLength = this.players.length;
 		this.swissstyle = this.swissstyle && this.round <= Math.ceil(Math.log(playerLength) / Math.log(2));
-		var sortedPlayers = this.players.slice().sort(this.players.comparePlayers);
 		this.resetAllPlayers();
+		var sortedPlayers = this.players.slice().sort(this.players.comparePlayers);
 		if (playerLength % 2 === 1) {
 			var player = this.getByePlayer(sortedPlayers);
 			this.giveBye(player);
@@ -99,8 +99,10 @@ Polymer({
 				});
 				this.linkPaths("games." + g + ".player1", "players." + i);
 				this.linkPaths("games." + g + ".player2", "players." + o);
-				this.push("players." + i + ".facedOpponents", opponent);
-				this.push("players." + o + ".facedOpponents", player);
+				if (!this.didPlayerFaceOpponent(player, opponent)) {
+					this.push("players." + i + ".facedOpponents", opponent);
+					this.push("players." + o + ".facedOpponents", player);
+				}
 			}
 		}
 	},
@@ -108,6 +110,7 @@ Polymer({
 		var playerLength = this.players.length;
 		for (var i = 0; i < playerLength; i++) {
 			this.set("players." + i + ".hasOpponent", false);
+			this.set("players." + i + ".randomSortIndex", Math.random());
 		}
 	},
 	getByePlayer: function(sortedPlayers) {
@@ -126,6 +129,12 @@ Polymer({
 		this.set("players." + i + ".hasOpponent", true);
 		this.set("players." + i + ".points", player.points + this.winpoints);
 		this.set("players." + i + ".games", player.games + 1);
+		for (var o = 0; o < player.facedOpponents.length; o++) {
+			var opponent = player.facedOpponents[o];
+			var buchholz = opponent.buchholz;
+			var index = opponent.index;
+			this.set("players." + index + ".buchholz", buchholz + this.winpoints);
+		}
 		var g = this.games.length;
 		this.push("games", {
 			bye: player

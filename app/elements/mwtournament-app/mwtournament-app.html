@@ -34,7 +34,7 @@
 		
 		<neon-animated-pages selected="{{selected}}" entry-animation="{{getEntryAnimation(selected)}}" exit-animation="{{getExitAnimation(selected)}}">
 			<mwtournament-rankingpage players="{{players}}"></mwtournament-rankingpage>
-			<mwtournament-gamepage games="{{games}}" players="{{players}}" winpoints="4"></mwtournament-gamepage>
+			<mwtournament-gamepage games="{{games}}" players="{{players}}" winpoints="4" modifiedpoints="3" drawpoints="1" lostpoints="0"></mwtournament-gamepage>
 		</neon-animated-pages>
 		
 	</paper-header-panel>
@@ -63,9 +63,18 @@ Polymer({
 						return player2first; // ensure new players are at the bottom
 					}
 					if (player1.games === 0 && player2.games === 0) {
-						return player1.joined - player2.joined; // older player first
+						return player1.joined - player2.joined; // ensure new players are at the bottom, older player first
 					}
-					return player2.points - player1.points; // most points first
+					if (player1.points != player2.points) {
+						return player2.points - player1.points; // 1. sorting criteria: more points first
+					}
+					if (player1.buchholz != player2.buchholz) {
+						return player2.buchholz - player1.buchholz; // 2. sorting criteria: buchholz tie system
+					}
+					if (player1.lastLife != player2.lastLife) {
+						return player2.lastLife - player1.lastLife; // 3. sorting criteria: more life left in last game
+					}
+					return player2.randomSortIndex - player1.randomSortIndex; // 4. sorting criteria: random
 				};
 				return players;
 			}

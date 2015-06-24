@@ -57,7 +57,7 @@
 					:
 					<span>{{game.player2points}}</span>
 				</div>
-				<mwtournament-resultform game="{{game}}" open$="{{openForm}}" opened="{{formOpened}}"></mwtournament-resultform>
+				<mwtournament-resultform game="{{game}}" players="{{players}}" open$="{{openForm}}" opened="{{formOpened}}"></mwtournament-resultform>
 			</template>
 			<template is="dom-if" if="{{!game.player1}}">
 				Bye, <span>{{game.bye.name}}</span> :)
@@ -80,6 +80,10 @@ Polymer({
 		},
 		game: {
 			type: Object,
+			notify: true
+		},
+		players: {
+			type: Array,
 			notify: true
 		},
 		openForm: {

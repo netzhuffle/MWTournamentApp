@@ -35,6 +35,10 @@ Polymer({
 			type: Object,
 			notify: true
 		},
+		players: {
+			type: Array,
+			notify: true
+		},
 		opened: {
 			type: Boolean,
 			value: false,
@@ -78,8 +82,10 @@ Polymer({
 	lifeChanged: function(player1life, player2life) {
 		player1life = parseInt(player1life, 10) || 0;
 		player2life = parseInt(player2life, 10) || 0;
-		var player1oldPoints = this.game.player1.points - this.game.player1points;
-		var player2oldPoints = this.game.player2.points - this.game.player2points;
+		var player1oldPoints = this.game.player1points;
+		var player2oldPoints = this.game.player2points;
+		var player1clearedPoints = this.game.player1.points - player1oldPoints;
+		var player2clearedPoints = this.game.player2.points - player2oldPoints;
 		if (!this.game.ranked) {
 			var player1points = 0;
 			var player2points = 0;
@@ -101,10 +107,22 @@ Polymer({
 		}
 		this.set("game.player1points", player1points);
 		this.set("game.player2points", player2points);
-		this.set("game.player1.points", player1oldPoints + player1points);
-		this.set("game.player2.points", player2oldPoints + player2points);
+		this.set("game.player1.points", player1clearedPoints + player1points);
+		this.set("game.player2.points", player2clearedPoints + player2points);
 		this.set("game.player1.lastLife", player1life);
 		this.set("game.player2.lastLife", player2life);
+		for (var o = 0; o < this.game.player1.facedOpponents.length; o++) {
+			var opponent = this.game.player1.facedOpponents[o];
+			var buchholz = opponent.buchholz;
+			var index = opponent.index;
+			this.set("players." + index + ".buchholz", buchholz - player1oldPoints + player1points);
+		}
+		for (var o = 0; o < this.game.player2.facedOpponents.length; o++) {
+			var opponent = this.game.player2.facedOpponents[o];
+			var buchholz = opponent.buchholz;
+			var index = opponent.index;
+			this.set("players." + index + ".buchholz", buchholz - player2oldPoints + player2points);
+		}
 	},
 	fireClose: function(e) {
 		e.stopPropagation();
