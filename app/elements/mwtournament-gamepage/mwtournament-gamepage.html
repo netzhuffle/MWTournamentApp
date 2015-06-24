@@ -36,8 +36,8 @@
 	<template is="dom-repeat" items="{{games}}" as="game">
 		<mwtournament-gamecard game="{{game}}" players="{{players}}"></mwtournament-gamecard>
 	</template>
-	<div class="fabposition">
-		<paper-fab icon="arrow-forward" on-tap="startNextRound" hidden$="{{!mayStartNextRound(games, players.length)}}"></paper-fab>
+	<div class="fabposition" hidden$="{{!players.length}}">
+		<paper-fab id="fab" icon="arrow-forward" on-tap="startNextRound"></paper-fab>
 	</div>
 </template>
 
@@ -63,13 +63,24 @@ Polymer({
 			value: true // have to switch to Danish System if too many rounds for player number
 		}
 	},
+	observers: [
+		"gameChanges(games.*)"
+	],
+	gameChanges: function(changeRecord) {
+		var changePath = changeRecord.path.split(".");
+		if (changePath[changePath.length - 1] === "ranked") {
+			if(this.games.every(function(game) {
+				return game.ranked;
+			})) {
+				this.$.fab.removeAttribute("hidden");
+			}
+		}
+	},
 	isRunning: function(gamesLength) {
 		return !!gamesLength;
 	},
-	mayStartNextRound: function(games, playersLength) {
-		return !!playersLength;
-	},
 	startNextRound: function(e) {
+		this.$.fab.setAttribute("hidden", "hidden");
 		this.games = [];
 		this.round++;
 		var playerLength = this.players.length;
@@ -105,6 +116,11 @@ Polymer({
 				}
 			}
 		}
+		if(this.games.every(function(game) {
+			return game.ranked;
+		})) {
+			this.$.fab.removeAttribute("hidden");
+		}
 	},
 	resetAllPlayers: function() {
 		var playerLength = this.players.length;
@@ -137,7 +153,8 @@ Polymer({
 		}
 		var g = this.games.length;
 		this.push("games", {
-			bye: player
+			bye: player,
+			ranked: true
 		});
 		this.linkPaths("games." + g + ".bye", "players." + i);
 	},
