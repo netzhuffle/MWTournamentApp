@@ -33,7 +33,7 @@
 	<template is="dom-if" if="{{isRunning(games.length)}}">
 		<mwtournament-roundcard round="{{round}}" swissstyle$="{{swissstyle}}"></mwtournament-roundcard>
 	</template>
-	<template is="dom-repeat" items="{{games}}" as="game">
+	<template is="dom-repeat" items="{{games}}" as="game" id="games">
 		<mwtournament-gamecard game="{{game}}" players="{{players}}" winpoints="{{winpoints}}" modifiedpoints="{{modifiedpoints}}" drawpoints="{{drawpoints}}" lostpoints="{{lostpoints}}"></mwtournament-gamecard>
 	</template>
 	<div class="fabposition" hidden$="{{!players.length}}">
@@ -85,6 +85,7 @@ Polymer({
 	startNextRound: function(e) {
 		this.$.fab.setAttribute("hidden", "hidden");
 		this.games = [];
+		this.$.games.render();
 		this.round++;
 		var playerLength = this.players.length;
 		this.swissstyle = this.swissstyle && this.round <= Math.ceil(Math.log(playerLength) / Math.log(2));
