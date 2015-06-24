@@ -111,17 +111,19 @@ Polymer({
 		this.set("game.player2.points", player2clearedPoints + player2points);
 		this.set("game.player1.lastLife", player1life);
 		this.set("game.player2.lastLife", player2life);
-		for (var o = 0; o < this.game.player1.facedOpponents.length; o++) {
-			var opponent = this.game.player1.facedOpponents[o];
-			var buchholz = opponent.buchholz;
+		this.calculateBuchholzForOpponents(this.game.player1);
+		this.calculateBuchholzForOpponents(this.game.player2);
+	},
+	calculateBuchholzForOpponents: function(player) {
+		for (var o = 0; o < player.facedOpponents.length; o++) {
+			var opponent = player.facedOpponents[o];
 			var index = opponent.index;
-			this.set("players." + index + ".buchholz", buchholz - player1oldPoints + player1points);
-		}
-		for (var o = 0; o < this.game.player2.facedOpponents.length; o++) {
-			var opponent = this.game.player2.facedOpponents[o];
-			var buchholz = opponent.buchholz;
-			var index = opponent.index;
-			this.set("players." + index + ".buchholz", buchholz - player2oldPoints + player2points);
+			var buchholz = 0;
+			for (var p = 0; p < opponent.facedOpponents.length; p++) {
+				buchholz += opponent.facedOpponents[p].points;
+				console.log("points from", opponent.facedOpponents[p].name, opponent.facedOpponents[p].points);
+			}
+			this.set("players." + index + ".buchholz", buchholz);
 		}
 	},
 	fireClose: function(e) {

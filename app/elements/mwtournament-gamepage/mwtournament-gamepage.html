@@ -94,9 +94,10 @@ Polymer({
 		for (var i = 0; i < playerLength; i++) {
 			if (!sortedPlayers[i].hasOpponent) {
 				var player = sortedPlayers[i];
+				var index = player.index;
 				var opponent = this.getOpponentForPlayer(sortedPlayers, player, i);
 				var o = opponent.index;
-				this.set("players." + i + ".hasOpponent", true);
+				this.set("players." + index + ".hasOpponent", true);
 				this.set("players." + o + ".hasOpponent", true);
 				var g = this.games.length;
 				this.push("games", {
@@ -111,7 +112,7 @@ Polymer({
 				this.linkPaths("games." + g + ".player1", "players." + i);
 				this.linkPaths("games." + g + ".player2", "players." + o);
 				if (!this.didPlayerFaceOpponent(player, opponent)) {
-					this.push("players." + i + ".facedOpponents", opponent);
+					this.push("players." + index + ".facedOpponents", opponent);
 					this.push("players." + o + ".facedOpponents", player);
 				}
 			}
@@ -147,9 +148,12 @@ Polymer({
 		this.set("players." + i + ".games", player.games + 1);
 		for (var o = 0; o < player.facedOpponents.length; o++) {
 			var opponent = player.facedOpponents[o];
-			var buchholz = opponent.buchholz;
 			var index = opponent.index;
-			this.set("players." + index + ".buchholz", buchholz + this.winpoints);
+			var buchholz = 0;
+			for (var p = 0; p < opponent.facedOpponents.length; p++) {
+				buchholz += opponent.facedOpponents[p].points;
+			}
+			this.set("players." + index + ".buchholz", buchholz);
 		}
 		var g = this.games.length;
 		this.push("games", {
