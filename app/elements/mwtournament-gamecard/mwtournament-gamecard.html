@@ -96,9 +96,17 @@ Polymer({
 	},
 	deactivateRipple: function(deactivate) {
 		if (deactivate) {
-			Polymer.dom(this.$$("#ripple")).classList.add("invisibleRipple");
+			var ripple = Polymer.dom(this.$$("#ripple"));
+			if (ripple) {
+				ripple.classList.add("invisibleRipple");
+			}
 		} else {
-			Polymer.dom(this.$$("#ripple")).classList.remove("invisibleRipple");
+			var ripple = Polymer.dom(this.$$("#ripple"));
+			if (ripple) {
+				try {
+					ripple.classList.remove("invisibleRipple");
+				} catch (e) {} // sometimes throws an error for unknown reasons
+			}
 		}
 	}
 });
