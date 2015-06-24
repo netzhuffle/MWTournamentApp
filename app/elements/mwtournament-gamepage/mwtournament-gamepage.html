@@ -112,7 +112,7 @@ Polymer({
 					player2life: 0,
 					ranked: false
 				});
-				this.linkPaths("games." + g + ".player1", "players." + i);
+				this.linkPaths("games." + g + ".player1", "players." + index);
 				this.linkPaths("games." + g + ".player2", "players." + o);
 				if (!this.didPlayerFaceOpponent(player, opponent)) {
 					this.push("players." + index + ".facedOpponents", opponent);

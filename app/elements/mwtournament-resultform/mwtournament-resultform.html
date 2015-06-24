@@ -86,10 +86,8 @@ Polymer({
 	lifeChanged: function(player1life, player2life) {
 		player1life = parseInt(player1life, 10) || 0;
 		player2life = parseInt(player2life, 10) || 0;
-		var player1oldPoints = this.game.player1points;
-		var player2oldPoints = this.game.player2points;
-		var player1clearedPoints = this.game.player1.points - player1oldPoints;
-		var player2clearedPoints = this.game.player2.points - player2oldPoints;
+		var player1clearedPoints = this.game.player1.points - this.game.player1points;
+		var player2clearedPoints = this.game.player2.points - this.game.player2points;
 		if (!this.game.ranked) {
 			var player1points = 0;
 			var player2points = 0;
