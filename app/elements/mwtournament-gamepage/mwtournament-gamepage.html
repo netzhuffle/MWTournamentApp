@@ -34,7 +34,7 @@
 		<mwtournament-roundcard round="{{round}}" swissstyle$="{{swissstyle}}"></mwtournament-roundcard>
 	</template>
 	<template is="dom-repeat" items="{{games}}" as="game">
-		<mwtournament-gamecard game="{{game}}" players="{{players}}"></mwtournament-gamecard>
+		<mwtournament-gamecard game="{{game}}" players="{{players}}" winpoints="{{winpoints}}" modifiedpoints="{{modifiedpoints}}" drawpoints="{{drawpoints}}" lostpoints="{{lostpoints}}"></mwtournament-gamecard>
 	</template>
 	<div class="fabposition" hidden$="{{!players.length}}">
 		<paper-fab id="fab" icon="arrow-forward" on-tap="startNextRound"></paper-fab>
@@ -54,6 +54,9 @@ Polymer({
 			notify: true
 		},
 		winpoints: Number,
+		modifiedpoints: Number,
+		drawpoints: Number,
+		lostpoints: Number,
 		round: {
 			type: Number,
 			value: 0

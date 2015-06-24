@@ -39,6 +39,10 @@ Polymer({
 			type: Array,
 			notify: true
 		},
+		winpoints: Number,
+		modifiedpoints: Number,
+		drawpoints: Number,
+		lostpoints: Number,
 		opened: {
 			type: Boolean,
 			value: false,
@@ -90,20 +94,20 @@ Polymer({
 			var player1points = 0;
 			var player2points = 0;
 		} else if (player1life === player2life) {
-			var player1points = 1;
-			var player2points = 1;
+			var player1points = this.drawpoints;
+			var player2points = this.drawpoints;
 		} else if (player1life === 0) {
-			var player1points = 0;
-			var player2points = 4;
+			var player1points = this.lostpoints;
+			var player2points = this.winpoints;
 		} else if (player2life === 0) {
-			var player1points = 4;
-			var player2points = 0;
+			var player1points = this.winpoints;
+			var player2points = this.lostpoints;
 		} else if (player1life > player2life) {
-			var player1points = 3;
-			var player2points = 1;
+			var player1points = this.modifiedpoints;
+			var player2points = this.drawpoints;
 		} else {
-			var player1points = 1;
-			var player2points = 3;
+			var player1points = this.drawpoints;
+			var player2points = this.modifiedpoints;
 		}
 		this.set("game.player1points", player1points);
 		this.set("game.player2points", player2points);
@@ -121,7 +125,6 @@ Polymer({
 			var buchholz = 0;
 			for (var p = 0; p < opponent.facedOpponents.length; p++) {
 				buchholz += opponent.facedOpponents[p].points;
-				console.log("points from", opponent.facedOpponents[p].name, opponent.facedOpponents[p].points);
 			}
 			this.set("players." + index + ".buchholz", buchholz);
 		}
