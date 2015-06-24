@@ -50,6 +50,8 @@ Polymer({
 	},
 	addPlayer: function(e) {
 		this.showAddForm = false;
+		var player = e.detail;
+		player.index = this.players.length; // need to keep track of player index for Polymer path notifications
 		this.push("players", e.detail);
 	},
 	comparePlayers: function(player1, player2) {

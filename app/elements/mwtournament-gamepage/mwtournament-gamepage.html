@@ -74,18 +74,20 @@ Polymer({
 		this.round++;
 		var playerLength = this.players.length;
 		this.swissstyle = this.swissstyle && this.round <= Math.ceil(Math.log(playerLength) / Math.log(2));
-		this.players.sort(this.players.comparePlayers);
+		var sortedPlayers = this.players.slice().sort(this.players.comparePlayers);
 		this.resetAllPlayers();
 		if (playerLength % 2 === 1) {
-			var playerIndex = this.getByePlayerIndex();
-			this.giveBye(playerIndex);
+			var player = this.getByePlayer(sortedPlayers);
+			this.giveBye(player);
 		}
 		for (var i = 0; i < playerLength; i++) {
-			if (!this.players[i].hasOpponent) {
+			if (!sortedPlayers[i].hasOpponent) {
 				var player = this.players[i];
-				var opponent = this.getOpponentForPlayer(player, i);
-				player.hasOpponent = true;
-				opponent.hasOpponent = true;
+				var opponent = this.getOpponentForPlayer(sortedPlayers, player, i);
+				var o = opponent.index;
+				this.set("players." + i + ".hasOpponent", true);
+				this.set("players." + o + ".hasOpponent", true);
+				var g = this.games.length;
 				this.push("games", {
 					player1: player,
 					player2: opponent,
@@ -95,8 +97,10 @@ Polymer({
 					player2life: 0,
 					ranked: false
 				});
-				player.facedOpponents.push(opponent);
-				opponent.facedOpponents.push(player);
+				this.linkPaths("games." + g + ".player1", "players." + i);
+				this.linkPaths("games." + g + ".player2", "players." + o);
+				this.push("players." + i + ".facedOpponents", opponent);
+				this.push("players." + o + ".facedOpponents", player);
 			}
 		}
 	},
@@ -106,32 +110,34 @@ Polymer({
 			this.players[i].hasOpponent = false;
 		}
 	},
-	getByePlayerIndex: function() {
-		var playerLength = this.players.length;
+	getByePlayer: function(sortedPlayers) {
+		var playerLength = sortedPlayers.length;
 		for (var i = playerLength - 1; i >= 0; i--) {
-			if (!this.players[i].hadBye) {
-				return i;
+			if (!sortedPlayers[i].hadBye) {
+				return sortedPlayers[i];
 			}
 		}
 		// everybody had a bye, take last player
-		return playerLength - 1;
+		return sortedPlayers[playerLength - 1];
 	},
-	giveBye: function(i) {
-		var player = this.players[i];
-		player.hadBye = true;
-		player.hasOpponent = true;
+	giveBye: function(player) {
+		var i = player.index;
+		this.set("players." + i + ".hadBye", true);
+		this.set("players." + i + ".hasOpponent", true);
 		this.set("players." + i + ".points", player.points + this.winpoints);
 		this.set("players." + i + ".games", player.games + 1);
+		var g = this.games.length;
 		this.push("games", {
 			bye: player
 		});
+		this.linkPaths("games." + g + ".bye", "players." + i);
 	},
-	getOpponentForPlayer: function(player, playerIndex) {
-		var playerLength = this.players.length;
+	getOpponentForPlayer: function(sortedPlayers, player, playerIndex) {
+		var playerLength = sortedPlayers.length;
 		for (var o = playerIndex + 1; o < playerLength; o++) {
-			var opponent = this.players[o];
+			var opponent = sortedPlayers[o];
 			if (!opponent.hasOpponent && (!this.swissStyle || !this.didPlayerFaceOpponent(player, opponent))) {
-				return this.players[o];
+				return opponent;
 			}
 		}
 	},

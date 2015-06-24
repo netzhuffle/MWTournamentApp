@@ -76,8 +76,10 @@ Polymer({
 		return "Remaining Life " + playerName + " (Life - Damage)";
 	},
 	lifeChanged: function(player1life, player2life) {
-		var player1oldPoints = this.game.player1.points - this.player1points;
-		var player2oldPoints = this.game.player2.points - this.player2points;
+		player1life = parseInt(player1life, 10) || 0;
+		player2life = parseInt(player2life, 10) || 0;
+		var player1oldPoints = this.game.player1.points - this.game.player1points;
+		var player2oldPoints = this.game.player2.points - this.game.player2points;
 		if (!this.game.ranked) {
 			var player1points = 0;
 			var player2points = 0;
@@ -100,7 +102,7 @@ Polymer({
 		this.set("game.player1points", player1points);
 		this.set("game.player2points", player2points);
 		this.set("game.player1.points", player1oldPoints + player1points);
-		this.set("game.player2.points", player1oldPoints + player1points);
+		this.set("game.player2.points", player2oldPoints + player2points);
 		this.set("game.player1.lastLife", player1life);
 		this.set("game.player2.lastLife", player2life);
 	},
@@ -112,11 +114,14 @@ Polymer({
 		if (opens) {
 			this._setOpened(true);
 			this.playAnimation("entry");
-		} else {
-			this.playAnimation("exit");
 			if (this.game && !this.game.ranked) {
 				this.set("game.ranked", true);
+				this.set("game.player1.games", this.game.player1.games + 1);
+				this.set("game.player2.games", this.game.player2.games + 1);
+				this.lifeChanged(this.game.player1life, this.game.player2life);
 			}
+		} else {
+			this.playAnimation("exit");
 		}
 	},
 	animationFinish: function(e) {

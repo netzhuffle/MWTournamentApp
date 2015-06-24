@@ -78,7 +78,10 @@ Polymer({
 			type: Boolean,
 			value: false
 		},
-		game: Object,
+		game: {
+			type: Object,
+			notify: true
+		},
 		openForm: {
 			type: Boolean,
 			value: false
