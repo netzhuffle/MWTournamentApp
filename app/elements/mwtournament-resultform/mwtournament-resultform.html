@@ -70,7 +70,7 @@ Polymer({
 						axis: "y",
 						transformOrigin: "top"
 					}
-				}
+				};
 			}
 		}
 	},
@@ -88,24 +88,25 @@ Polymer({
 		player2life = parseInt(player2life, 10) || 0;
 		var player1clearedPoints = this.game.player1.points - this.game.player1points;
 		var player2clearedPoints = this.game.player2.points - this.game.player2points;
-		if (!this.game.ranked) {
-			var player1points = 0;
-			var player2points = 0;
-		} else if (player1life === player2life) {
-			var player1points = this.drawpoints;
-			var player2points = this.drawpoints;
-		} else if (player1life === 0) {
-			var player1points = this.lostpoints;
-			var player2points = this.winpoints;
-		} else if (player2life === 0) {
-			var player1points = this.winpoints;
-			var player2points = this.lostpoints;
-		} else if (player1life > player2life) {
-			var player1points = this.modifiedpoints;
-			var player2points = this.drawpoints;
-		} else {
-			var player1points = this.drawpoints;
-			var player2points = this.modifiedpoints;
+		var player1points = 0;
+		var player2points = 0;
+		if (this.game.ranked) {
+			if (player1life === player2life) {
+				player1points = this.drawpoints;
+				player2points = this.drawpoints;
+			} else if (player1life === 0) {
+				player1points = this.lostpoints;
+				player2points = this.winpoints;
+			} else if (player2life === 0) {
+				player1points = this.winpoints;
+				player2points = this.lostpoints;
+			} else if (player1life > player2life) {
+				player1points = this.modifiedpoints;
+				player2points = this.drawpoints;
+			} else {
+				player1points = this.drawpoints;
+				player2points = this.modifiedpoints;
+			}
 		}
 		this.set("game.player1points", player1points);
 		this.set("game.player2points", player2points);

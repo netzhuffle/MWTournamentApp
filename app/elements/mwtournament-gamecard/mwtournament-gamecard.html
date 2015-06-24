@@ -106,14 +106,11 @@ Polymer({
 		this.openForm = false;
 	},
 	deactivateRipple: function(deactivate) {
-		if (deactivate) {
-			var ripple = Polymer.dom(this.$$("#ripple"));
-			if (ripple) {
+		var ripple = Polymer.dom(this.$$("#ripple"));
+		if (ripple) {
+			if (deactivate) {
 				ripple.classList.add("invisibleRipple");
-			}
-		} else {
-			var ripple = Polymer.dom(this.$$("#ripple"));
-			if (ripple) {
+			} else {
 				try {
 					ripple.classList.remove("invisibleRipple");
 				} catch (e) {} // sometimes throws an error for unknown reasons
