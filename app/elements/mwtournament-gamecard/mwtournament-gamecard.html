@@ -15,6 +15,10 @@
 		@apply(--paper-font-body2);
 	}
 	
+	paper-ripple {
+		cursor: pointer;
+	}
+	
 	span {
 		padding: 0 10px;
 	}
@@ -33,11 +37,12 @@
 	
 	.invisibleRipple {
 		color: #fff;
+		cursor: auto;
 	}
 </style>
 
 <template>
-	<paper-material on-tap="tap" on-close="close">
+	<paper-material elevation="{{getCardElevation(formOpened)}}" on-tap="tap" on-close="close">
 		<template is="dom-if" if="{{noPlayers}}">
 			Once you have added a few players you can start the first tournament round here!
 		</template>
@@ -98,6 +103,12 @@ Polymer({
 			type: Boolean,
 			observer: "deactivateRipple"
 		}
+	},
+	getCardElevation(isOpened) {
+		if (isOpened) {
+			return 3;
+		}
+		return 1;
 	},
 	tap: function(e) {
 		this.openForm = true;
